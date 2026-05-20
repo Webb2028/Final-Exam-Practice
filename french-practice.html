@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>French Practice — Présent, Passé composé & Writing</title>
+<style>
+  :root {
+    --bleu: #0055A4;
+    --blanc: #FFFFFF;
+    --rouge: #EF4135;
+    --bg: #f5f7fb;
+    --card: #ffffff;
+    --ink: #1a1a2e;
+    --muted: #6b7280;
+    --good: #16a34a;
+    --bad: #dc2626;
+    --soft: #eef2ff;
+    --border: #e5e7eb;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+  header {
+    background: linear-gradient(90deg, var(--bleu) 0%, var(--bleu) 33%, var(--blanc) 33%, var(--blanc) 66%, var(--rouge) 66%, var(--rouge) 100%);
+    height: 8px;
+  }
+  .container {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 24px 20px 80px;
+  }
+  h1 {
+    font-size: 28px;
+    margin: 8px 0 4px;
+    letter-spacing: -0.5px;
+  }
+  .sub {
+    color: var(--muted);
+    margin-bottom: 24px;
+    font-size: 15px;
+  }
+  .tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+  .tab {
+    flex: 1 1 auto;
+    min-width: 140px;
+    background: var(--card);
+    border: 1.5px solid var(--border);
+    color: var(--ink);
+    padding: 12px 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.15s ease;
+    text-align: center;
+  }
+  .tab:hover { border-color: var(--bleu); }
+  .tab.active {
+    background: var(--bleu);
+    color: white;
+    border-color: var(--bleu);
+  }
+  .card {
+    background: var(--card);
+    border-radius: 14px;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    border: 1px solid var(--border);
+  }
+  .prompt-label {
+    color: var(--muted);
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+  .prompt {
+    font-size: 22px;
+    margin-bottom: 6px;
+    font-weight: 500;
+  }
+  .verb-hint {
+    color: var(--muted);
+    font-size: 14px;
+    margin-bottom: 20px;
+    font-style: italic;
+  }
+  .choices {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  @media (max-width: 480px) {
+    .choices { grid-template-columns: 1fr; }
+    .prompt { font-size: 19px; }
+  }
+  .choice {
+    background: var(--soft);
+    border: 1.5px solid transparent;
+    color: var(--ink);
+    padding: 14px 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 17px;
+    text-align: center;
+    transition: all 0.15s ease;
+    font-family: inherit;
+  }
+  .choice:hover:not(:disabled) {
+    border-color: var(--bleu);
+    transform: translateY(-1px);
+  }
+  .choice:disabled { cursor: default; }
+  .choice.correct {
+    background: #dcfce7;
+    border-color: var(--good);
+    color: var(--good);
+    font-weight: 600;
+  }
+  .choice.wrong {
+    background: #fee2e2;
+    border-color: var(--bad);
+    color: var(--bad);
+  }
+  .feedback {
+    min-height: 24px;
+    font-size: 15px;
+    margin: 12px 0 16px;
+    font-weight: 500;
+  }
+  .feedback.good { color: var(--good); }
+  .feedback.bad { color: var(--bad); }
+  .next-btn, .primary-btn {
+    background: var(--bleu);
+    color: white;
+    border: none;
+    padding: 12px 22px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: opacity 0.15s ease;
+  }
+  .next-btn:hover, .primary-btn:hover { opacity: 0.9; }
+  .secondary-btn {
+    background: white;
+    color: var(--bleu);
+    border: 1.5px solid var(--bleu);
+    padding: 12px 22px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    margin-right: 8px;
+    transition: all 0.15s ease;
+  }
+  .secondary-btn:hover { background: var(--soft); }
+  .score {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    font-size: 14px;
+    color: var(--muted);
+  }
+  .score b { color: var(--ink); }
+  textarea {
+    width: 100%;
+    min-height: 140px;
+    padding: 14px;
+    border-radius: 10px;
+    border: 1.5px solid var(--border);
+    font-family: inherit;
+    font-size: 16px;
+    resize: vertical;
+    line-height: 1.5;
+  }
+  textarea:focus {
+    outline: none;
+    border-color: var(--bleu);
+  }
+  .sample-answer {
+    background: var(--soft);
+    border-left: 4px solid var(--bleu);
+    padding: 14px 16px;
+    border-radius: 6px;
+    margin-top: 16px;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+  .sample-answer .label {
+    font-weight: 700;
+    color: var(--bleu);
+    display: block;
+    margin-bottom: 6px;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .hidden { display: none; }
+  .footer {
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+    margin-top: 32px;
+  }
+  .keyboard-tip {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 12px;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+<header></header>
+<div class="container">
+  <h1>French Practice</h1>
+  <p class="sub">Le présent · Le passé composé · Verbes irréguliers · Expression écrite</p>
+
+  <div class="tabs">
+    <button class="tab active" data-mode="present">Le présent</button>
+    <button class="tab" data-mode="passe">Le passé composé</button>
+    <button class="tab" data-mode="irregular">avoir · être · aller · faire</button>
+    <button class="tab" data-mode="writing">Expression écrite</button>
+  </div>
+
+  <div class="card" id="card"></div>
+
+  <p class="footer">Practice as much as you like — questions are generated randomly. Bonne chance!</p>
+</div>
+
+<script>
+/* =====================================================================
+   FRENCH PRACTICE APP
+   ===================================================================== */
+
+/* ---------- Verb data ---------- */
+const verbsER = [
+  { inf: "parler",     en: "to speak",     vowel: false },
+  { inf: "aimer",      en: "to like/love", vowel: true  },
+  { inf: "manger",     en: "to eat",       vowel: false },
+  { inf: "chanter",    en: "to sing",      vowel: false },
+  { inf: "écouter",    en: "to listen",    vowel: true  },
+  { inf: "regarder",   en: "to watch",     vowel: false },
+  { inf: "étudier",    en: "to study",     vowel: true  },
+  { inf: "travailler", en: "to work",      vowel: false },
+  { inf: "habiter",    en: "to live",      vowel: true  },
+  { inf: "danser",     en: "to dance",     vowel: false },
+  { inf: "marcher",    en: "to walk",      vowel: false },
+  { inf: "donner",     en: "to give",      vowel: false },
+  { inf: "jouer",      en: "to play",      vowel: false },
+  { inf: "trouver",    en: "to find",      vowel: false },
+  { inf: "porter",     en: "to wear/carry",vowel: false },
+  { inf: "fermer",     en: "to close",     vowel: false },
+  { inf: "laver",      en: "to wash",      vowel: false },
+  { inf: "rester",     en: "to stay",      vowel: false },
+  { inf: "monter",     en: "to go up",     vowel: false },
+  { inf: "tomber",     en: "to fall",      vowel: false }
+];
+
+const verbsIR = [
+  { inf: "finir",     en: "to finish",  vowel: false },
+  { inf: "choisir",   en: "to choose",  vowel: false },
+  { inf: "grandir",   en: "to grow up", vowel: false },
+  { inf: "réussir",   en: "to succeed", vowel: false },
+  { inf: "obéir",     en: "to obey",    vowel: true  },
+  { inf: "remplir",   en: "to fill",    vowel: false },
+  { inf: "applaudir", en: "to applaud", vowel: true  },
+  { inf: "punir",     en: "to punish",  vowel: false },
+  { inf: "rougir",    en: "to blush",   vowel: false },
+  { inf: "maigrir",   en: "to lose weight", vowel: false },
+  { inf: "grossir",   en: "to gain weight", vowel: false }
+];
+
+const verbsRE = [
+  { inf: "vendre",    en: "to sell",     vowel: false },
+  { inf: "attendre",  en: "to wait for", vowel: true  },
+  { inf: "descendre", en: "to go down",  vowel: false },
+  { inf: "entendre",  en: "to hear",     vowel: true  },
+  { inf: "perdre",    en: "to lose",     vowel: false },
+  { inf: "rendre",    en: "to give back",vowel: false },
+  { inf: "répondre",  en: "to answer",   vowel: false },
+  { inf: "défendre",  en: "to defend",   vowel: false }
+];
+
+const pronouns = [
+  { p: "je",      idx: 0, vowel: true  },   // becomes j' before a vowel
+  { p: "tu",      idx: 1, vowel: false },
+  { p: "il",      idx: 2, vowel: false },
+  { p: "elle",    idx: 2, vowel: false },
+  { p: "on",      idx: 2, vowel: false },
+  { p: "nous",    idx: 3, vowel: false },
+  { p: "vous",    idx: 4, vowel: false },
+  { p: "ils",     idx: 5, vowel: false },
+  { p: "elles",   idx: 5, vowel: false }
+];
+
+/* ---------- Conjugation logic ---------- */
+function conjugatePresentER(inf) {
+  let stem = inf.slice(0, -2);
+  return [
+    stem + "e",
+    stem + "es",
+    stem + "e",
+    stem + "ons",
+    stem + "ez",
+    stem + "ent"
+  ];
+}
+function conjugatePresentIR(inf) {
+  let stem = inf.slice(0, -2);
+  return [
+    stem + "is",
+    stem + "is",
+    stem + "it",
+    stem + "issons",
+    stem + "issez",
+    stem + "issent"
+  ];
+}
+function conjugatePresentRE(inf) {
+  let stem = inf.slice(0, -2);
+  return [
+    stem + "s",
+    stem + "s",
+    stem,
+    stem + "ons",
+    stem + "ez",
+    stem + "ent"
+  ];
+}
+function pastParticiple(inf, group) {
+  let stem = inf.slice(0, -2);
+  if (group === "er") return stem + "é";
+  if (group === "ir") return stem + "i";
+  if (group === "re") return stem + "u";
+}
+
+/* Irregulars */
+const irregular = {
+  avoir: {
+    en: "to have",
+    present: ["ai", "as", "a", "avons", "avez", "ont"],
+    passe:   ["ai eu", "as eu", "a eu", "avons eu", "avez eu", "ont eu"],
+    presentStartsVowel: [true, false, false, false, false, false]
+  },
+  être: {
+    en: "to be",
+    present: ["suis", "es", "est", "sommes", "êtes", "sont"],
+    passe:   ["ai été", "as été", "a été", "avons été", "avez été", "ont été"],
+    presentStartsVowel: [false, true, true, false, true, false]
+  },
+  aller: {
+    en: "to go",
+    present: ["vais", "vas", "va", "allons", "allez", "vont"],
+    // aller uses être as auxiliary in passé composé — we keep it to present-only
+    passe:   null,
+    presentStartsVowel: [false, false, false, false, false, false]
+  },
+  faire: {
+    en: "to do/make",
+    present: ["fais", "fais", "fait", "faisons", "faites", "font"],
+    passe:   ["ai fait", "as fait", "a fait", "avons fait", "avez fait", "ont fait"],
+    presentStartsVowel: [false, false, false, false, false, false]
+  }
+};
+
+/* ---------- Pronoun formatting (elision) ---------- */
+function pronounWithVerb(pronounObj, verbForm) {
+  // Check if verb starts with a vowel or silent h
+  const firstChar = verbForm.charAt(0).toLowerCase();
+  const vowelStart = "aeiouéèêàâîïôöùûhAEIOUÉÈÊÀÂÎÏÔÖÙÛH".includes(firstChar);
+  if (pronounObj.p === "je" && vowelStart) {
+    return "j'" + verbForm;
+  }
+  return pronounObj.p + " " + verbForm;
+}
+
+/* ---------- Random helpers ---------- */
+function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+function shuffle(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+function uniqueDistractors(correct, pool, n = 3) {
+  const set = new Set();
+  let attempts = 0;
+  while (set.size < n && attempts < 100) {
+    const d = pick(pool);
+    if (d !== correct && !set.has(d)) set.add(d);
+    attempts++;
+  }
+  return Array.from(set);
+}
+
+/* ---------- Question generators ---------- */
+function genRegularQ(tense, allowedGroups) {
+  // allowedGroups: subset of ["er","ir","re"]
+  const group = pick(allowedGroups);
+  const pool = group === "er" ? verbsER : group === "ir" ? verbsIR : verbsRE;
+  const verb = pick(pool);
+  const pronoun = pick(pronouns);
+
+  let correctForm, distractorPool;
+
+  if (tense === "present") {
+    const forms = group === "er" ? conjugatePresentER(verb.inf)
+                 : group === "ir" ? conjugatePresentIR(verb.inf)
+                 : conjugatePresentRE(verb.inf);
+    correctForm = forms[pronoun.idx];
+    // Build distractor pool: other present forms of same verb + forms of similar verbs
+    distractorPool = forms.slice();
+    // Add a few forms from other random verbs of same group
+    for (let i = 0; i < 3; i++) {
+      const otherVerb = pick(pool);
+      const otherForms = group === "er" ? conjugatePresentER(otherVerb.inf)
+                      : group === "ir" ? conjugatePresentIR(otherVerb.inf)
+                      : conjugatePresentRE(otherVerb.inf);
+      distractorPool.push(otherForms[Math.floor(Math.random() * 6)]);
+    }
+  } else { // passé composé
+    const avoirForms = irregular.avoir.present;
+    const pp = pastParticiple(verb.inf, group);
+    correctForm = avoirForms[pronoun.idx] + " " + pp;
+    // Distractors: wrong auxiliary form + wrong past participle ending
+    distractorPool = [];
+    avoirForms.forEach(a => distractorPool.push(a + " " + pp));
+    // Wrong past participle endings
+    const stem = verb.inf.slice(0, -2);
+    const wrongPPs = [stem + "é", stem + "i", stem + "u"].filter(x => x !== pp);
+    wrongPPs.forEach(wpp => distractorPool.push(avoirForms[pronoun.idx] + " " + wpp));
+  }
+
+  const distractors = uniqueDistractors(correctForm, distractorPool, 3);
+  // If we don't have 3 distractors, pad with random plausible options
+  while (distractors.length < 3) {
+    distractors.push(verb.inf + (distractors.length === 0 ? "e" : "s"));
+  }
+  const choices = shuffle([correctForm, ...distractors]);
+
+  const promptText = pronounWithVerb(pronoun, "____") + ".";
+  const hint = verb.inf + " (" + verb.en + ")"
+    + " · " + (tense === "present" ? "présent" : "passé composé");
+
+  return { prompt: promptText, hint, correct: correctForm, choices };
+}
+
+function genIrregularQ() {
+  const verbNames = Object.keys(irregular);
+  const name = pick(verbNames);
+  const data = irregular[name];
+  // Decide tense: present always available; passé composé only if data.passe exists
+  const tenses = data.passe ? ["present", "passe"] : ["present"];
+  const tense = pick(tenses);
+  const forms = tense === "present" ? data.present : data.passe;
+  const pronoun = pick(pronouns);
+  const correctForm = forms[pronoun.idx];
+
+  // Distractors: other forms of same verb + forms of other irregulars
+  const distractorPool = forms.slice();
+  verbNames.filter(v => v !== name).forEach(v => {
+    const other = irregular[v];
+    const otherForms = tense === "present" ? other.present : (other.passe || other.present);
+    distractorPool.push(otherForms[pronoun.idx]);
+    distractorPool.push(otherForms[Math.floor(Math.random() * 6)]);
+  });
+
+  const distractors = uniqueDistractors(correctForm, distractorPool, 3);
+  while (distractors.length < 3) distractors.push(name);
+  const choices = shuffle([correctForm, ...distractors]);
+
+  const promptText = pronounWithVerb(pronoun, "____") + ".";
+  const hint = name + " (" + data.en + ")"
+    + " · " + (tense === "present" ? "présent" : "passé composé");
+
+  return { prompt: promptText, hint, correct: correctForm, choices };
+}
+
+/* ---------- Writing prompts ---------- */
+const writingPrompts = [
+  {
+    q: "Pourquoi tu aimes le français?",
+    sample: "J'aime le français parce que c'est une belle langue. J'aime la culture française et la musique. J'étudie le français à l'école et je trouve les mots très intéressants. Un jour, je voudrais visiter Paris."
+  },
+  {
+    q: "Décris ta famille.",
+    sample: "Dans ma famille, nous sommes quatre personnes. J'ai un frère et une sœur. Mon père travaille dans un bureau et ma mère est professeur. Nous habitons dans une grande maison. J'aime beaucoup ma famille."
+  },
+  {
+    q: "Qu'est-ce que tu fais le week-end?",
+    sample: "Le week-end, je reste à la maison ou je joue avec mes amis. Le samedi, j'étudie pour mes cours. Le dimanche, ma famille et moi mangeons ensemble. Parfois, je regarde un film ou j'écoute de la musique."
+  },
+  {
+    q: "Parle de ton meilleur ami / ta meilleure amie.",
+    sample: "Mon meilleur ami s'appelle Lucas. Il a quinze ans comme moi. Il est très drôle et gentil. Nous aimons les mêmes choses : le foot, les jeux vidéo et la musique. Nous habitons dans le même quartier."
+  },
+  {
+    q: "Quelle est ta nourriture préférée et pourquoi?",
+    sample: "Ma nourriture préférée, c'est la pizza. J'aime la pizza parce qu'elle est délicieuse. Je mange souvent de la pizza avec ma famille le vendredi soir. Je préfère la pizza au fromage, mais j'aime aussi les pizzas avec des légumes."
+  },
+  {
+    q: "Où habites-tu? Décris ta ville ou ton quartier.",
+    sample: "J'habite dans une petite ville. Il y a une école, un parc et quelques magasins. Mon quartier est calme et joli. J'aime marcher dans le parc avec mes amis. En été, il fait chaud et nous jouons dehors."
+  },
+  {
+    q: "Qu'est-ce que tu as mangé hier?",
+    sample: "Hier, j'ai mangé une salade pour le déjeuner. Le soir, ma mère a préparé du poulet avec du riz. J'ai aussi mangé un dessert : un gâteau au chocolat. J'ai bu un jus d'orange. C'était délicieux!"
+  },
+  {
+    q: "Décris ta journée typique.",
+    sample: "Je commence ma journée à sept heures. Je mange le petit-déjeuner et je vais à l'école. À l'école, j'étudie le français, les maths et les sciences. L'après-midi, je rentre à la maison et je fais mes devoirs. Le soir, je regarde la télé avec ma famille."
+  },
+  {
+    q: "Quel est ton film ou ta série préféré(e) et pourquoi?",
+    sample: "Mon film préféré, c'est Harry Potter. J'aime ce film parce que l'histoire est magique et amusante. Les acteurs jouent très bien et les effets spéciaux sont incroyables. J'ai regardé ce film plusieurs fois avec mes amis."
+  },
+  {
+    q: "Qu'est-ce que tu aimes faire pendant les vacances?",
+    sample: "Pendant les vacances, j'aime voyager avec ma famille. Nous visitons souvent la plage en été. J'aime nager et jouer dans le sable. Je passe aussi du temps avec mes amis et je lis beaucoup de livres."
+  },
+  {
+    q: "Parle de ton école.",
+    sample: "Mon école est grande et moderne. Il y a beaucoup d'élèves et de professeurs gentils. J'étudie six matières : le français, l'anglais, les maths, l'histoire, les sciences et le sport. Ma matière préférée, c'est l'art parce que j'aime dessiner."
+  },
+  {
+    q: "Décris ta chambre.",
+    sample: "Ma chambre est petite mais confortable. Les murs sont bleus, ma couleur préférée. Il y a un lit, un bureau et une étagère avec beaucoup de livres. J'ai aussi des affiches de mes groupes préférés. J'aime passer du temps dans ma chambre."
+  },
+  {
+    q: "Qu'est-ce que tu as fait ce week-end?",
+    sample: "Ce week-end, j'ai joué au foot avec mes amis. Samedi soir, j'ai regardé un film à la maison. Dimanche, j'ai mangé chez mes grands-parents. Nous avons parlé et ri ensemble. J'ai aussi fini mes devoirs pour lundi."
+  },
+  {
+    q: "Quelles sont tes activités préférées?",
+    sample: "J'aime beaucoup de choses différentes. J'adore écouter de la musique et danser dans ma chambre. Je joue aussi au basket avec mes amis. À la maison, je regarde des séries et je joue aux jeux vidéo. Je trouve ces activités très amusantes."
+  },
+  {
+    q: "Parle d'un voyage que tu as fait.",
+    sample: "L'été dernier, j'ai voyagé en France avec ma famille. Nous avons visité Paris et nous avons vu la tour Eiffel. J'ai mangé des croissants et des macarons délicieux. J'ai aussi acheté des souvenirs. C'était un voyage incroyable!"
+  },
+  {
+    q: "Décris ton animal préféré.",
+    sample: "Mon animal préféré, c'est le chien. J'aime les chiens parce qu'ils sont fidèles et amusants. J'ai un chien à la maison. Il s'appelle Max et il a trois ans. Tous les jours, je joue avec lui dans le jardin."
+  },
+  {
+    q: "Qu'est-ce que tu manges au petit-déjeuner?",
+    sample: "Pour le petit-déjeuner, je mange des céréales avec du lait. Parfois, je mange du pain avec de la confiture. Je bois aussi un jus d'orange ou un chocolat chaud. Le week-end, ma mère prépare des œufs et c'est délicieux."
+  },
+  {
+    q: "Pourquoi tu étudies le français?",
+    sample: "J'étudie le français parce que c'est une langue importante dans le monde. Je voudrais voyager en France et au Canada un jour. Le français est aussi utile pour ma future carrière. En plus, j'aime beaucoup la culture française et la cuisine."
+  },
+  {
+    q: "Décris ta saison préférée.",
+    sample: "Ma saison préférée, c'est l'été. J'aime l'été parce qu'il fait chaud et il y a beaucoup de soleil. Je n'ai pas d'école et je peux jouer dehors avec mes amis. Nous allons à la piscine et nous mangeons des glaces. C'est super!"
+  },
+  {
+    q: "Qu'est-ce que tu fais après l'école?",
+    sample: "Après l'école, je rentre à la maison et je mange un goûter. Ensuite, je fais mes devoirs pendant deux heures. Quand j'ai fini, je joue au foot avec mes amis ou j'écoute de la musique. Le soir, je dîne avec ma famille."
+  },
+  {
+    q: "Quel sport tu préfères et pourquoi?",
+    sample: "Mon sport préféré, c'est le tennis. J'aime le tennis parce que c'est un sport rapide et stratégique. Je joue au tennis avec mon père tous les week-ends. C'est aussi une bonne activité pour rester en forme et passer du temps en famille."
+  },
+  {
+    q: "Décris ton professeur préféré.",
+    sample: "Mon professeur préféré, c'est mon prof de français. Il est très gentil et patient. Il explique bien les leçons et il a beaucoup d'humour. Dans sa classe, nous apprenons beaucoup et nous nous amusons. J'aime aller à son cours."
+  },
+  {
+    q: "Qu'est-ce que tu aimes regarder à la télé?",
+    sample: "J'aime regarder des séries comiques à la télé. Je trouve ces séries très amusantes et elles me font rire. Je regarde aussi des documentaires sur les animaux parce que j'aime la nature. Le week-end, je regarde des films avec ma famille."
+  },
+  {
+    q: "Décris une fête que tu aimes.",
+    sample: "Ma fête préférée, c'est mon anniversaire. Chaque année, mes amis viennent à la maison. Nous mangeons un gâteau et nous jouons à des jeux. Je reçois des cadeaux de ma famille. C'est toujours une journée très spéciale et joyeuse."
+  }
+];
+
+/* ---------- App state ---------- */
+let mode = "present";
+let stats = { present: {c:0,t:0}, passe: {c:0,t:0}, irregular: {c:0,t:0} };
+let currentQ = null;
+
+/* ---------- Rendering ---------- */
+const card = document.getElementById("card");
+
+function renderQuestion() {
+  if (mode === "writing") {
+    renderWriting();
+    return;
+  }
+
+  if (mode === "present")    currentQ = genRegularQ("present", ["er","ir","re"]);
+  if (mode === "passe")      currentQ = genRegularQ("passe",   ["er","ir","re"]);
+  if (mode === "irregular")  currentQ = genIrregularQ();
+
+  const s = stats[mode];
+  const pct = s.t > 0 ? Math.round(100 * s.c / s.t) : 0;
+
+  card.innerHTML = `
+    <div class="prompt-label">Choisis la bonne forme</div>
+    <div class="prompt">${escapeHTML(currentQ.prompt)}</div>
+    <div class="verb-hint">${escapeHTML(currentQ.hint)}</div>
+    <div class="choices" id="choices"></div>
+    <div class="feedback" id="feedback"></div>
+    <button class="next-btn hidden" id="nextBtn">Question suivante →</button>
+    <div class="score">
+      <span>Score: <b>${s.c} / ${s.t}</b> ${s.t > 0 ? "(" + pct + "%)" : ""}</span>
+      <button class="secondary-btn" id="resetBtn" style="padding:6px 12px;font-size:13px;">Reset score</button>
+    </div>
+  `;
+
+  const choicesDiv = document.getElementById("choices");
+  currentQ.choices.forEach(ch => {
+    const btn = document.createElement("button");
+    btn.className = "choice";
+    btn.textContent = ch;
+    btn.onclick = () => handleAnswer(btn, ch);
+    choicesDiv.appendChild(btn);
+  });
+
+  document.getElementById("nextBtn").onclick = renderQuestion;
+  document.getElementById("resetBtn").onclick = () => {
+    stats[mode] = {c:0, t:0};
+    renderQuestion();
+  };
+}
+
+function handleAnswer(btn, chosen) {
+  const buttons = document.querySelectorAll(".choice");
+  buttons.forEach(b => {
+    b.disabled = true;
+    if (b.textContent === currentQ.correct) b.classList.add("correct");
+    else if (b === btn) b.classList.add("wrong");
+  });
+  const fb = document.getElementById("feedback");
+  const s = stats[mode];
+  s.t++;
+  if (chosen === currentQ.correct) {
+    s.c++;
+    fb.textContent = "✓ Très bien!";
+    fb.className = "feedback good";
+  } else {
+    fb.textContent = "✗ La bonne réponse est : " + currentQ.correct;
+    fb.className = "feedback bad";
+  }
+  // Update score display
+  const scoreSpan = document.querySelector(".score span");
+  const pct = Math.round(100 * s.c / s.t);
+  scoreSpan.innerHTML = `Score: <b>${s.c} / ${s.t}</b> (${pct}%)`;
+
+  document.getElementById("nextBtn").classList.remove("hidden");
+}
+
+function renderWriting() {
+  const prompt = pick(writingPrompts);
+  card.innerHTML = `
+    <div class="prompt-label">Expression écrite</div>
+    <div class="prompt">${escapeHTML(prompt.q)}</div>
+    <div class="verb-hint">Write 3–5 sentences. When you finish, click "Show sample answer" to compare.</div>
+    <textarea id="userWriting" placeholder="Écris ta réponse ici..."></textarea>
+    <div style="margin-top:14px;">
+      <button class="secondary-btn" id="showSample">Show sample answer</button>
+      <button class="primary-btn" id="newPrompt">New prompt →</button>
+    </div>
+    <div class="sample-answer hidden" id="sampleBox">
+      <span class="label">Sample answer (one possibility)</span>
+      ${escapeHTML(prompt.sample)}
+    </div>
+    <p class="keyboard-tip">Tip: there are many right answers. Use this sample only to check your grammar and vocabulary.</p>
+  `;
+  document.getElementById("showSample").onclick = () => {
+    document.getElementById("sampleBox").classList.remove("hidden");
+  };
+  document.getElementById("newPrompt").onclick = renderWriting;
+}
+
+function escapeHTML(s) {
+  return String(s).replace(/[&<>"']/g, c => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"
+  }[c]));
+}
+
+/* ---------- Tab handling ---------- */
+document.querySelectorAll(".tab").forEach(tab => {
+  tab.onclick = () => {
+    document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+    tab.classList.add("active");
+    mode = tab.dataset.mode;
+    renderQuestion();
+  };
+});
+
+/* ---------- Start ---------- */
+renderQuestion();
+</script>
+</body>
+</html>
